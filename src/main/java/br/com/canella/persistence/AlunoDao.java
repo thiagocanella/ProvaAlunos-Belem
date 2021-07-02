@@ -11,7 +11,7 @@ public class AlunoDao extends Dao implements IDao{
 
 
 
-	public void createUsuario(Aluno aluno) throws Exception {	
+	public void criarAluno(Aluno aluno) throws Exception {	
 		open();
 		stmt = con.prepareStatement("  insert into aluno values (null, ?, null,null,null,null )");
 		stmt.setString(1, aluno.getNomeAluno());
@@ -19,16 +19,16 @@ public class AlunoDao extends Dao implements IDao{
 		close();
 	}
 
-	public AlunoDto lerUsuarioPorId(Aluno aluno) throws Exception {
+	public AlunoDto lerAlunoPorId(Aluno aluno) throws Exception {
 
 		open();
 		AlunoDto resultado = new AlunoDto();
 
-		String query = "select * from aluno where idusuario = "+ aluno.getIdAluno().toString();
+		String query = "select * from aluno where idaluno = "+ aluno.getIdAluno().toString();
 		stmt = con.prepareStatement(query);
 		rs = stmt.executeQuery();
 		while(rs.next()) {
-			resultado.setIdAluno(rs.getInt("idUsuario"));
+			resultado.setIdAluno(rs.getInt("idaluno"));
 			resultado.setNomeAluno(rs.getString("nomeAluno"));
 			resultado.setComecouAprova(rs.getDate("comecouAprova"));
 			resultado.setTerminouAprova(rs.getDate("terminouAprova"));
@@ -37,32 +37,23 @@ public class AlunoDao extends Dao implements IDao{
 		}
 		close();
 		return  resultado;
-		/*new Aluno(
-				resultado.getIdAluno(),
-				resultado.getNomeAluno(),
-				resultado.getComecouAprova(),
-				resultado.getTerminouAprova(),
-				resultado.getNota(),
-				resultado.getIdProva(),
-				null				
-				);*/
-
 	}
 
-	public List<AlunoDto> lerTodosAlunos() throws Exception {
+	public List<Aluno> lerTodosAlunos() throws Exception {
 
 		open();
-		List<AlunoDto> resultado = new ArrayList<AlunoDto>();
+		List<Aluno> resultado = new ArrayList<Aluno>();
 		stmt = con.prepareStatement("select * from aluno");
 		rs = stmt.executeQuery();
 		while(rs.next()) {
-			resultado.add(new AlunoDto(	
-					rs.getInt("idUsuario"),
+			resultado.add(new Aluno(	
+					rs.getInt("idaluno"),
 					rs.getString("nomeAluno"),
 					rs.getDate("comecouAprova"),
 					rs.getDate("terminouAprova"),
 					rs.getDouble("nota"),
-					rs.getInt("idProva")
+					rs.getInt("idProva"),
+					null
 					));
 
 		}
@@ -74,7 +65,9 @@ public class AlunoDao extends Dao implements IDao{
 
 	public void deletarAluno(Aluno aluno) throws Exception{
 		open();
-		stmt.executeUpdate("delete from cliente where idUsuario = "+ aluno.getIdAluno().toString());
+		stmt = con.prepareStatement("delete from aluno where idAluno = ?");
+		stmt.setInt(1,  aluno.getIdAluno());
+		stmt.execute();	
 		close();
 	}
 

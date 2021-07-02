@@ -31,7 +31,7 @@ public static void lerQuestTest() {
 	QuestaoDao qDao = new QuestaoDao();
 
 	Questao quest = new Questao();
-	quest.setIdQuestao(1);
+	quest.setIdQuestao(2);
 	
 	Questao result = new Questao();
 	
@@ -50,7 +50,7 @@ public static void atualizarQUestaoTest() {
 	QuestaoDao qDao = new QuestaoDao();
 
 	Questao quest = new Questao();
-	quest.setIdQuestao(1);
+	quest.setIdQuestao(2);
 	quest.setPergunta("Quato é 2^3?");
 	quest.setOpcao1("8");
 	quest.setOpcao2("12");
@@ -71,7 +71,7 @@ public static void deletarQuestaoTest() {
 	QuestaoDao qDao = new QuestaoDao();
 
 	Questao quest = new Questao();
-	quest.setIdQuestao(1);
+	quest.setIdQuestao(3);
 	
 	try {
 		qDao.deletarQuestao(quest);

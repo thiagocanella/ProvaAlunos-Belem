@@ -32,9 +32,9 @@ public class ProvaDao extends Dao implements IDao{
 		}
 
 
-		con.setAutoCommit(true);
+	
 		con.commit();
-
+		con.setAutoCommit(true);
 
 		close();
 	}
@@ -43,7 +43,9 @@ public class ProvaDao extends Dao implements IDao{
 
 		open();
 		Prova resultado = new Prova();
-		rs = stmt.executeQuery("select * from prova where idProva = "+ prova.getIdProva().toString());
+		
+		String query = "select * from prova where idProva = "+ prova.getIdProva().toString();
+		rs = stmt.executeQuery(query);
 		while(rs.next()) {
 			resultado.setIdProva(rs.getInt("idProva"));
 			resultado.setCriado(rs.getDate("criado"));
@@ -51,9 +53,10 @@ public class ProvaDao extends Dao implements IDao{
 			resultado.setUuid(rs.getString("uuid"));
 		}
 		close();
-
+		
+		if(resultado != null) {
 		resultado.setQuestoes(lerTodasQuestoesDaProvaPorId(resultado));
-
+		}
 
 		return resultado;
 
