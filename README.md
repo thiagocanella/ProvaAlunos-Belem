@@ -3,7 +3,7 @@ Prova do Edson Belem de teste de OO relacional ManyToMany com MySQL e front-end 
 
 
 
-TODO: Front-end , Testes e JUnit
+TODO: JUnit e conclusão do processo da prova
 
 
 Esquema do banco:
