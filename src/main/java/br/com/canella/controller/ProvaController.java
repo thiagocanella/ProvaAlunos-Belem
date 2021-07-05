@@ -1,18 +1,20 @@
 package br.com.canella.controller;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
 
-
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
+import br.com.canella.entity.dto.AlunoDto;
 import br.com.canella.model.Aluno;
 import br.com.canella.model.Prova;
+import br.com.canella.model.Questao;
 import br.com.canella.persistence.AlunoDao;
 import br.com.canella.persistence.ProvaDao;
 
@@ -27,7 +29,7 @@ public class ProvaController extends HttpServlet {
 	private Double nota;
 	private AlunoDao aDao;
 	private ProvaDao pDao;
-	private List<Boolean> acertos = new ArrayList<Boolean>();
+	private Integer acertos;
 	
 	public ProvaController() {
 		aDao = new  AlunoDao();
@@ -58,7 +60,33 @@ public class ProvaController extends HttpServlet {
 	
 	
 	
-	public void doPost(HttpServletRequest request, HttpServletResponse response) {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		HttpSession session = request.getSession(true);
+
+		List<Questao> questoes = (List<Questao>)session.getAttribute("questoes");
+		
+		
+		Integer i = 1;
+		Integer acertos = 0;
+		for(Questao questao : questoes)
+		{
+			String perg = "pergunta"+i.toString();
+			Integer quest = Integer.parseInt( request.getParameter(perg).toString());
+			if(questao.getOpcaocorreta() == quest) {
+				System.out.println("resposta certa " + perg);
+				acertos++;
+			}
+			i++;
+		}
+		this.setAcertos(acertos);
+		calcularNota(i -1);
+		System.out.println("A nota é " + this.getNota().toString());
+		setarFimDaProva(request, getNota());
+		request.getRequestDispatcher("resultado.jsp").forward(request, response);
+		
+	
+		
 		
 	}
 
@@ -102,13 +130,13 @@ public class ProvaController extends HttpServlet {
 
 
 
-	public List<Boolean> getAcertos() {
+	public Integer getAcertos() {
 		return acertos;
 	}
 
 
 
-	public void setAcertos(List<Boolean> acertos) {
+	public void setAcertos(Integer acertos) {
 		this.acertos = acertos;
 	}
 
@@ -117,25 +145,14 @@ public class ProvaController extends HttpServlet {
 	
 	
 
-	public void calcularNota() {
-		Integer numeroAcertos = 0;
-		for(int x =0; x < acertos.size(); x++) {
-			if(acertos.get(x) == true) {
-				numeroAcertos =+ 1;
-			}
-			else {
-				numeroAcertos =+ 0;	
-			}
-					
-		}
+	public void calcularNota(Integer qntPerguntas) {
 		
-		this.nota = (double) (numeroAcertos / acertos.size());
+		Double total = 10d;
+		this.nota = (double)((total / qntPerguntas) * acertos);
 	}
 	
 	
-	public void computarAcerto() {
-		acertos.add(true);
-	}
+
 	
 	
 	public static Prova listarProva(int id) {
@@ -155,5 +172,32 @@ public class ProvaController extends HttpServlet {
 		return p;
 	}
 	
+	public static void setarDataInicioDaProva(HttpServletRequest request)
+	{
+		HttpSession session = request.getSession(true);
+		AlunoDto a = (AlunoDto)session.getAttribute("alunoAtual");
+
+		AlunoDao aDao = new AlunoDao();
+		try {
+			aDao.atualizarInicioProvaAluno(a);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void setarFimDaProva(HttpServletRequest request , Double nota)
+	{
+		HttpSession session = request.getSession(true);
+		AlunoDto a = (AlunoDto)session.getAttribute("alunoAtual");
+		a.setNota(nota);
+		AlunoDao aDao = new AlunoDao();
+		try {
+			aDao.atualizarFimProvaAlunoComNota(a);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 }

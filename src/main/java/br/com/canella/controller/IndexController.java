@@ -92,7 +92,7 @@ public class IndexController extends HttpServlet {
 		catch(Exception e) {
 			
 			e.printStackTrace();
-			System.out.println("Não existe o método");
+			System.out.println("Problema no método");
 		}
 	}
 	

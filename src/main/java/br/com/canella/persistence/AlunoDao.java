@@ -110,5 +110,26 @@ public class AlunoDao extends Dao implements IDao{
 
 
 	}
+	
+	public void atualizarInicioProvaAluno(AlunoDto requisicao) throws Exception{
+		open();
+		stmt = con.prepareStatement("update aluno set comecouAprova = NOW() where idAluno = ?" );
+		stmt.setInt(1, requisicao.getIdAluno());
+		stmt.execute();		
+		close();
+
+	}
+	
+	public void atualizarFimProvaAlunoComNota(AlunoDto requisicao) throws Exception{
+		open();
+		stmt = con.prepareStatement("update aluno set terminouAprova = NOW(), nota = ? where idAluno = ?" );
+		stmt.setDouble(1, requisicao.getNota());
+		stmt.setInt(2, requisicao.getIdAluno());
+		stmt.execute();		
+		close();
+
+	}
+	
+	
 
 }

@@ -44,9 +44,9 @@
 					  			int id = Integer.parseInt(session.getAttribute("provaAtual").toString());
 								prova = ProvaController.listarProva(id);
 								List<Questao> questoes = prova.getQuestoes();
-      							
+								int i = 1;
 								for (Questao questao : questoes) {
-      								int i = 1;
+      								
       						 		out.println("<h4>" + questao.getPergunta().toString() + " </h4><br> " +
       											 "<ol> <li> " + questao.getOpcao1().toString() + " </li> <br>" +
       											" <li> " + questao.getOpcao2().toString() + " </li> <br> " +
@@ -59,9 +59,10 @@
       								 );	  
       						 		 i++;
      						 
-      								
+      							
    								}
-      					
+								session.setAttribute("questoes", questoes);
+      							ProvaController.setarDataInicioDaProva(request);
 						    %>
 
 						<% %>

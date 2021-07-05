@@ -31,7 +31,12 @@
 					if(a !=null){
 						out.println(" <h2> " + a.getNota().toString() + " </h2> ");
 						if(a.getNota() < 6){
-							
+							request.setAttribute("Mensagem" , "Você precisa estudar mais");
+						}
+						else
+						{
+							request.setAttribute("Mensagem" , "Parabéns, você ficou acima da média");
+
 						}
 					}
 					%>						
