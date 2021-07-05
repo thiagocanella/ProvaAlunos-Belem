@@ -14,7 +14,7 @@ public class AlunoTest {
 	public static void criarAlunoTest() {
 		AlunoDao aDao = new AlunoDao();
 		Aluno a = new Aluno();
-		a.setNomeAluno("Adriana Bordignon");
+		a.setNomeAluno("Ayrton Senna");
 		try {
 			aDao.criarAluno(a);
 		} catch (Exception e) {
@@ -23,13 +23,37 @@ public class AlunoTest {
 
 	}
 
-	public static void lerAlunoTest() {
+	public static void lerAlunoTestPorId() {
 		AlunoDao aDao = new AlunoDao();
 		Aluno a = new Aluno();
 		a.setIdAluno(2);
 		AlunoDto res = new AlunoDto();
 		try {
 			res = aDao.lerAlunoPorId(a);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Aluno result = new Aluno(
+				res.getIdAluno(),
+				res.getNomeAluno(),
+				res.getComecouAprova(),
+				res.getTerminouAprova(),
+				res.getNota(),
+				res.getIdProva(),
+				null				
+				);
+
+		System.out.println(result);
+	}
+
+
+	public static void lerAlunoTestPorNome() {
+		AlunoDao aDao = new AlunoDao();
+		Aluno a = new Aluno();
+		a.setNomeAluno("Adriana Bordignon");
+		AlunoDto res = new AlunoDto();
+		try {
+			res = aDao.lerAlunoPorNome(a);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -94,7 +118,7 @@ public class AlunoTest {
 
 
 	public static void main(String[] args) {
-		apagarAlunoTest();
+		criarAlunoTest();
 	}
 
 }

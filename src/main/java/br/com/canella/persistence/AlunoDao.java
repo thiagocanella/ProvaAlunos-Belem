@@ -13,8 +13,10 @@ public class AlunoDao extends Dao implements IDao{
 
 	public void criarAluno(Aluno aluno) throws Exception {	
 		open();
-		stmt = con.prepareStatement("  insert into aluno values (null, ?, null,null,null,null )");
-		stmt.setString(1, aluno.getNomeAluno());
+		stmt = con.prepareStatement("  insert into aluno values (null, ?, null,null,null,? )");
+		stmt.setString(1, aluno.getNomeAluno());	
+		stmt.setInt(2, aluno.getIdProva());
+
 		stmt.execute();
 		close();
 	}
@@ -39,6 +41,29 @@ public class AlunoDao extends Dao implements IDao{
 		return  resultado;
 	}
 
+
+	public AlunoDto lerAlunoPorNome(Aluno aluno) throws Exception {
+
+		open();
+		AlunoDto resultado = new AlunoDto();
+
+		String query = "select * from aluno where nomeAluno = '"+ aluno.getNomeAluno().toString() +"'";
+		stmt = con.prepareStatement(query);
+		rs = stmt.executeQuery();
+		while(rs.next()) {
+			resultado.setIdAluno(rs.getInt("idaluno"));
+			resultado.setNomeAluno(rs.getString("nomeAluno"));
+			resultado.setComecouAprova(rs.getDate("comecouAprova"));
+			resultado.setTerminouAprova(rs.getDate("terminouAprova"));
+			resultado.setNota(rs.getDouble("nota"));
+			resultado.setIdProva(rs.getInt("idProva"));
+		}
+		close();
+		return  resultado;
+	}
+
+	
+	
 	public List<Aluno> lerTodosAlunos() throws Exception {
 
 		open();

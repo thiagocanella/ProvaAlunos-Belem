@@ -1,10 +1,11 @@
+<%@page import="br.com.canella.entity.dto.AlunoDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html ;charset=UTF-8">
-<title>Boa Prova</title>
+<title>Resultado</title>
 <link
 	href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -20,35 +21,28 @@
 
 
 				<div class="card-header">
-					<h3 style="color:black">Bem vindo a prova</h3>
+					<h3 style="color:black">Sua nota:</h3>
 				</div>
 
 				<div class="card-body">
 
-					<form method="post" action="IndexController" class="form">
-						<div class="input-group form-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text"><i class="fas fa-user"></i></span>
-							</div>
-							<input type="text" name="nome" placeholder="Digite seu nome."
-								class="form-control">
-						</div>
-						<div class="form-group">
-							<input type="submit" value="Entrar" name="flag"
-								class="btn float-right login_btn">
-						</div>
-						
-
-					</form>
-
+					<%
+					AlunoDto a = (AlunoDto)session.getAttribute("alunoAtual");
+					if(a !=null){
+						out.println(" <h2> " + a.getNota().toString() + " </h2> ");
+						if(a.getNota() < 6){
+							
+						}
+					}
+					%>						
+					
 
 				</div>
 
 
 				<div class="card-footer">
 					<div class="d-flex justify-content-center links">
-						<font style="color:black">Para se cadastrar para prova </font><a href="cadastro.jsp">clique
-							aqui.</a>
+						<font style="color:black">${Mensagem} </font>
 					</div>
 				</div>
 

@@ -3,7 +3,7 @@ use provas;
 
 create table prova(
 idProva int primary key auto_increment,
- nomeProva varchar(60),
+ nomeProva varchar(60) unique,
  criado DATETIME,
  uuid varchar (50) unique
  );
@@ -29,7 +29,7 @@ idProva int primary key auto_increment,
  
  create table aluno(
  idAluno int primary key auto_increment,
- nomeAluno varchar(255),
+ nomeAluno varchar(255) unique,
  comecouAprova DATETIME,
  terminouAprova datetime,
  nota double,

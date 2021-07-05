@@ -45,7 +45,8 @@ public class ProvaDao extends Dao implements IDao{
 		Prova resultado = new Prova();
 		
 		String query = "select * from prova where idProva = "+ prova.getIdProva().toString();
-		rs = stmt.executeQuery(query);
+		stmt = con.prepareStatement(query);
+		rs = stmt.executeQuery();
 		while(rs.next()) {
 			resultado.setIdProva(rs.getInt("idProva"));
 			resultado.setCriado(rs.getDate("criado"));
@@ -54,7 +55,7 @@ public class ProvaDao extends Dao implements IDao{
 		}
 		close();
 		
-		if(resultado != null) {
+		if(resultado != null  && resultado.getIdProva() != 0) {
 		resultado.setQuestoes(lerTodasQuestoesDaProvaPorId(resultado));
 		}
 
@@ -66,8 +67,12 @@ public class ProvaDao extends Dao implements IDao{
 
 		List<Questao> listaResultado = new ArrayList<Questao>();
 		open();
-		rs = stmt.executeQuery("SELECT a.* FROM questao as A INNER JOIN questaoprova as B  on a.idQuestao = b.idQuestao where b.idProva ="	+ prova.getIdProva().toString());
-
+		
+		String query = "SELECT a.* FROM questao as A INNER JOIN questaoprova as B  on a.idQuestao = b.idQuestao where b.idProva ="	+ prova.getIdProva().toString();
+		stmt = con.prepareStatement(query);
+		rs = stmt.executeQuery();
+		
+		
 		while(rs.next()) {
 			listaResultado.add(new Questao(
 					rs.getInt("idQuestao"),
@@ -102,6 +107,47 @@ public class ProvaDao extends Dao implements IDao{
 		close();
 	}
 
+	
+	public List<Prova> lerTodasProvas() throws Exception {
+
+		open();
+		List<Prova> resultado = new ArrayList<Prova>();
+		
+		String query = "select * from prova";
+		stmt = con.prepareStatement(query);
+		rs = stmt.executeQuery();
+		while(rs.next()) {
+			Prova result = new Prova();
+			result.setIdProva(rs.getInt("idProva"));
+			result.setCriado(rs.getDate("criado"));
+			result.setNomeProva(rs.getString("nomeProva"));
+			result.setUuid(rs.getString("uuid"));
+			resultado.add(result);
+		}
+		close();
+		return resultado;
+
+	}
+	
+	
+	public Prova lerProvaPorNome(Prova prova) throws Exception {
+
+		open();
+		Prova resultado = new Prova();
+		
+		String query = "select * from prova where nomeProva = '"+ prova.getNomeProva().toString() + "'";
+		stmt = con.prepareStatement(query);
+		rs = stmt.executeQuery();
+		while(rs.next()) {
+			resultado.setIdProva(rs.getInt("idProva"));
+			resultado.setCriado(rs.getDate("criado"));
+			resultado.setNomeProva(rs.getString("nomeProva"));
+			resultado.setUuid(rs.getString("uuid"));
+		}
+		close();
+	return resultado;
+
+	}
 
 
 }
